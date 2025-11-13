@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Get Class Access — CTA Landing</title>
+  <style>
+    /* --- Reset & base --- */
+    :root{
+      --red:#ff2d2d; --dark-red:#cc0000; --yellow:#ffd000; --muted:#666;
+      --card-bg: #ffffff;
+      --glass: rgba(255,255,255,0.12);
+      --radius: 16px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0;}
+
+    /* --- animated background --- */
+    body{
+      background: linear-gradient(120deg, #ffefcc 0%, #ffe6e6 30%, #fff0d9 60%, #fff8e6 100%);
+      min-height:100%; display:flex; align-items:center; justify-content:center; padding:28px;
+    }
+    .bg-blobs{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .blob{position:absolute; filter:blur(40px); opacity:0.38; mix-blend-mode:screen}
+    .b1{width:420px;height:420px;background:radial-gradient(circle at 30% 30%, #ffecb3, #ffb74d); left:-80px; top:-80px}
+    .b2{width:360px;height:360px;background:radial-gradient(circle at 70% 40%, #ff8a80, #ff5252); right:-100px; top:30px}
+
+    /* --- main card --- */
+    .card{position:relative; width:980px; max-width:980px; display:grid; grid-template-columns:420px 1fr; gap:24px; align-items:center;
+      background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.9)); border-radius:22px; padding:28px; box-shadow:0 20px 50px rgba(20,20,20,0.12); z-index:1;
+    }
+
+    /* left visual */
+    .visual{padding:18px; border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.35)); display:flex; flex-direction:column; gap:14px; align-items:center; justify-content:center}
+    .logo{width:140px; height:64px; object-fit:contain; border-radius:8px; background:linear-gradient(90deg,var(--red),var(--yellow)); display:flex; align-items:center; justify-content:center; color:white; font-weight:700}
+    .hero-img{width:100%; height:220px; border-radius:12px; object-fit:cover; background:#f6f6f6; display:flex; align-items:center; justify-content:center; color:var(--muted)}
+    .features{width:100%; display:flex; gap:10px; justify-content:space-between}
+    .feature{flex:1; padding:10px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.35)); text-align:center}
+    .feature h4{margin:4px 0; color:var(--dark-red); font-size:14px}
+    .feature p{margin:0; font-size:13px; color:var(--muted)}
+
+    /* right form */
+    .form-wrap{padding:6px 2px}
+    h1{margin:0 0 6px 0; color:var(--dark-red); font-size:26px}
+    p.lead{margin:0 0 18px 0; color:var(--muted)}
+
+    form{display:grid; gap:12px}
+    .row{display:flex; gap:12px}
+    input[type=text], input[type=tel], select{
+      width:100%; padding:14px 12px; border-radius:10px; border:1px solid rgba(0,0,0,0.08); font-size:15px; outline:none; background:transparent
+    }
+    input:focus, select:focus{box-shadow:0 6px 20px rgba(204,0,0,0.06); border-color:var(--red)}
+
+    .primary{display:flex; gap:12px; align-items:center}
+    .cta{background:linear-gradient(90deg,var(--red),var(--dark-red)); color:white; border:none; padding:14px 18px; border-radius:12px; font-weight:700; cursor:pointer; font-size:16px}
+
+    .note{font-size:13px; color:var(--muted)}
+    .response{margin-top:8px; font-weight:600}
+
+    /* small helper link */
+    .small-link{font-size:13px; color:var(--dark-red); text-decoration:none}
+
+    /* custom cursor (subtle) */
+    .cursor{position:fixed; width:14px; height:14px; border-radius:50%; transform:translate(-50%,-50%); pointer-events:none; z-index:9999; border:2px solid rgba(0,0,0,0.12); background:rgba(0,0,0,0.04)}
+
+    /* responsive */
+    @media (max-width:900px){
+      .card{grid-template-columns:1fr; max-width:680px}
+      .visual{order:2}
+    }
+    @media (max-width:520px){
+      body{padding:16px}
+      .card{padding:18px}
+      .hero-img{height:160px}
+      h1{font-size:20px}
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-blobs" aria-hidden>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <div class="card" role="main">
+    <div class="visual">
+      <div class="logo">YOUR LOGO</div>
+      <div class="hero-img" id="hero">Poster / Class preview image</div>
+      <div class="features">
+        <div class="feature"><h4>Instant Access</h4><p>Get link right after signup</p></div>
+        <div class="feature"><h4>Secure</h4><p>Links mapped from your sheet</p></div>
+        <div class="feature"><h4>Mobile Ready</h4><p>Works on any phone</p></div>
+      </div>
+    </div>
+
+    <div class="form-wrap">
+      <h1>Unlock Your Class — Free Access</h1>
+      <p class="lead">Enter your name and phone number. Choose the class and we'll deliver the Drive link instantly.</p>
+
+      <form id="ctaForm" autocomplete="off">
+        <input type="text" id="name" name="name" placeholder="Full name" required />
+        <input type="tel" id="phone" name="phone" placeholder="Phone (10 digits)" pattern="[0-9]{10}" required />
+
+        <select id="className" required>
+          <option value="">Select Class</option>
+          <option value="Accounts">Accounts</option>
+          <option value="Economics">Economics</option>
+          <option value="Maths">Maths</option>
+          <option value="Business Studies">Business Studies</option>
+        </select>
+
+        <select id="subject" required>
+          <option value="">Select Subject</option>
+          <option value="Chapter 1">Chapter 1</option>
+          <option value="Chapter 2">Chapter 2</option>
+          <option value="Full Syllabus">Full Syllabus</option>
+        </select>
+
+        <div class="primary">
+          <button type="submit" class="cta">Get Access Now</button>
+          <div style="flex:1">
+            <div class="note">Special Launch Price <strong>₹399</strong></div>
+            <a class="small-link" href="#" id="terms">Why we ask phone?</a>
+          </div>
+        </div>
+      </form>
+
+      <div class="response" id="response" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="cursor" id="cursor"></div>
+
+  <script>
+    // --- Replace this with your Apps Script Web App URL ---
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz5morZQKA0QK8beFUrYYc1BN6ejKlT_mgRjV7UBvGbaLp9NlfewKkuvZKGkEPiC_WH/exec'; // <-- replace me
+
+    // small helper: replace hero placeholder with poster if provided via URL param
+    (function setHeroFromParam(){
+      try{
+        const urlParams = new URLSearchParams(location.search);
+        const poster = urlParams.get('poster');
+        if(poster){ document.getElementById('hero').style.backgroundImage = 'url('+poster+')'; document.getElementById('hero').textContent=''; }
+      } catch(e){/* ignore */}
+    })();
+
+    // Form handling
+    const form = document.getElementById('ctaForm');
+    const responseEl = document.getElementById('response');
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      responseEl.textContent = 'Processing...';
+
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const className = document.getElementById('className').value;
+      const subject = document.getElementById('subject').value;
+
+      if(!WEB_APP_URL || WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbz5morZQKA0QK8beFUrYYc1BN6ejKlT_mgRjV7UBvGbaLp9NlfewKkuvZKGkEPiC_WH/exec'){
+        responseEl.innerHTML = '⚠️ Please replace <code>YOUR_WEB_APP_URL</code> in the code with your Apps Script Web App URL to enable submissions.';
+        return;
+      }
+
+      // simple phone validation
+      if(!/^\d{10}$/.test(phone)){
+        responseEl.textContent = 'Please enter a valid 10 digit phone number.';
+        return;
+      }
+
+      try{
+        const res = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify({ name, phone, className, subject })
+        });
+
+        const data = await res.json();
+        if(data && data.status === 'success'){
+          const link = data.link || '#';
+          responseEl.innerHTML = '✅ Success — <a href="'+link+'" target="_blank" rel="noopener">Open your class here</a>';
+          form.reset();
+        } else {
+          responseEl.textContent = 'Error: ' + (data && data.message ? data.message : 'Unable to get link.');
+        }
+      } catch(err){
+        responseEl.textContent = 'Network error — check your Web App URL and CORS settings.';
+        console.error(err);
+      }
+    });
+
+    // tiny custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', (e)=>{ cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+
+    // accessibility: allow Enter to submit on select change
+    document.getElementById('className').addEventListener('change', ()=>{ document.getElementById('response').textContent=''; });
+
+  </script>
+</body>
+</html>
