@@ -132,9 +132,21 @@
 
   <div class="cursor" id="cursor"></div>
 
+  <!-- Success Popup (moved before script to ensure elements exist) -->
+  <div id="successPopup" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:99999;">
+    <div style="background:white; padding:28px; border-radius:16px; width:90%; max-width:360px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.25); animation:popIn 0.3s ease;">
+      <h2 style="margin-top:0; color:#cc0000; font-size:22px;">Access Granted 🎉</h2>
+      <p style="color:#444; font-size:15px; margin:10px 0 20px;">Your class link is ready. Click below to open it.</p>
+      <a id="popupLink" href="#" target="_blank" style="display:block; background:#cc0000; color:white; padding:12px 16px; border-radius:10px; text-decoration:none; font-weight:600; margin-bottom:14px;">Open Class</a>
+      <button id="popupClose" style="background:#eee; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:600;">Close</button>
+    </div>
+  </div>
+
+  <style>@keyframes popIn{0%{transform:scale(0.8);opacity:0;}100%{transform:scale(1);opacity:1;}}</style>
+
   <script>
     // --- Replace this with your Apps Script Web App URL ---
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz5morZQKA0QK8beFUrYYc1BN6ejKlT_mgRjV7UBvGbaLp9NlfewKkuvZKGkEPiC_WH/exec'; // <-- replace me
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz5morZQKA0QK8beFUrYYc1BN6ejKlT_mgRjV7UBvGbaLp9NlfewKkuvZKGkEPiC_WH/exec';
 
     // small helper: replace hero placeholder with poster if provided via URL param
     (function setHeroFromParam(){
@@ -162,7 +174,6 @@
         responseEl.innerHTML = '⚠️ Web App URL missing.';
         return;
       }
-      }
 
       // simple phone validation
       if(!/^\d{10}$/.test(phone)){
@@ -180,7 +191,10 @@
         const data = await res.json();
         if(data && data.status === 'success'){
           const link = data.link || '#';
-          responseEl.innerHTML = '✅ Success — <a href="'+link+'" target="_blank" rel="noopener">Open your class here</a>';
+          // Show popup
+          document.getElementById('popupLink').href = link;
+          document.getElementById('successPopup').style.display = 'flex';
+          responseEl.textContent = '';
           form.reset();
         } else {
           responseEl.textContent = 'Error: ' + (data && data.message ? data.message : 'Unable to get link.');
@@ -197,6 +211,9 @@
 
     // accessibility: allow Enter to submit on select change
     document.getElementById('className').addEventListener('change', ()=>{ document.getElementById('response').textContent=''; });
+
+    // popup close button
+    document.getElementById('popupClose').addEventListener('click', function(){ document.getElementById('successPopup').style.display = 'none'; });
 
   </script>
 </body>
