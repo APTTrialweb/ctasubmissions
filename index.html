@@ -146,13 +146,13 @@
 
   <script>
     // --- Replace this with your Apps Script Web App URL ---
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxIbKaXFUnNKU8iV9ZlSYXEaLPDLcL0AIWXWKAJCFh2Y2wg75QFwG8558riZJLEB9Cj/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwvhSY_wRnLCgD4NVNvxw57zkDOTGr3DIWjzfLaMCWCPkHPiWMZFM7gW8HpivBXMHD3/exec';
 
     // small helper: replace hero placeholder with poster if provided via URL param
     (function setHeroFromParam(){
       try{
         const urlParams = new URLSearchParams(location.search);
-        const poster = urlParams.get('poster');
+        const poster = urlParams.get('poster');zz
         if(poster){ document.getElementById('hero').style.backgroundImage = 'url('+poster+')'; document.getElementById('hero').textContent=''; }
       } catch(e){/* ignore */}
     })();
